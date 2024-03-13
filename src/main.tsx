@@ -6,15 +6,21 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { HomePage } from './routes/home/index.tsx';
 import { Root } from './routes/root.tsx';
+import { TasksPage } from './routes/tasks/index.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    errorElement: <h1>Not Found</h1>,
     children: [
       {
         path: '',
         element: <HomePage />
+      },
+      {
+        path: 'tasks',
+        element: <TasksPage />
       }
     ]
   }
