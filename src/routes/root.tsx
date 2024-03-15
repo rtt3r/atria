@@ -4,17 +4,17 @@ import { Sidebar } from './components/sidebar';
 
 export const Root = () => {
   return (
-    <div className="flex flex-col h-screen w-screen">
-      <div className="flex-1 flex">
-        <Sidebar />
+    <div className="flex h-screen w-screen bg-primary text-primary-foreground">
+      <Sidebar />
 
-        <main className="flex-1 p-4">
+      <div className="flex-1 flex flex-col rounded-ss-[2rem] mt-2 bg-white text-slate-900 dark:bg-slate-800 dark:text-white">
+        <main className="flex-1 flex flex-col pt-10 px-12">
           <Outlet />
         </main>
+        <footer className="flex justify-center items-center w-full h-8 text-xs">
+          Footer
+        </footer>
       </div>
-      <footer className="flex justify-center items-center w-full h-8 text-xs border-t border-gray-800">
-        Footer
-      </footer>
     </div>
   );
 };

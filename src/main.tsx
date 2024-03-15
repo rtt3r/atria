@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { HomePage } from './routes/home/index.tsx';
 import { Root } from './routes/root.tsx';
+import { SettingsPage } from './routes/settings/index.tsx';
 import { TasksPage } from './routes/tasks/index.tsx';
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'tasks',
         element: <TasksPage />
+      },
+      {
+        path: 'settings',
+        element: <SettingsPage />
       }
     ]
   }
