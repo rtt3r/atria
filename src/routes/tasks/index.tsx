@@ -1,8 +1,8 @@
 import { TaskItem } from '@/components/task-item';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { IContainer } from '@/types/container';
-import { ITask } from '@/types/taks';
+import { TaskService } from '@/services/task-service';
+import { ITask, ITaskChanges, ITaskStatus } from '@/types/taks';
 import {
   DragDropContext,
   Draggable,
@@ -12,89 +12,67 @@ import {
 } from '@hello-pangea/dnd';
 import { Filter } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { v4 as uuid } from 'uuid';
+
+const taskService = new TaskService();
 
 export const TasksPage = () => {
-  const [containers, setContainers] = useState<IContainer[]>([]);
-  const [tasks] = useState<ITask[]>([
-    {
-      id: uuid(),
-      title: 'Criar página de login',
-      description: 'Criar página de login com autenticação de usuário',
-      status: 'A fazer',
-      tags: ['login', 'autenticacao']
-    },
-    {
-      id: uuid(),
-      title: 'Criar página de cadastro',
-      description: 'Criar página de cadastro com autenticação de usuário',
-      status: 'A fazer',
-      tags: ['cadastro', 'autenticacao']
-    },
-    {
-      id: uuid(),
-      title: 'Criar página de dashboard',
-      description: 'Criar página de dashboard com autenticação de usuário',
-      status: 'Fazendo',
-      tags: ['dashboard', 'autenticacao']
-    },
-    {
-      id: uuid(),
-      title: 'Criar página de perfil',
-      description: 'Criar página de perfil com autenticação de usuário',
-      status: 'Fazendo',
-      tags: ['perfil', 'autenticacao']
-    },
-    {
-      id: uuid(),
-      title: 'Criar página de configurações',
-      description: 'Criar página de configurações com autenticação de usuário',
-      status: 'Fazendo',
-      tags: ['configuracoes', 'autenticacao']
-    },
-    {
-      id: uuid(),
-      title: 'Criar página de tarefas',
-      description: 'Criar página de tarefas com autenticação de usuário',
-      status: 'Feito',
-      tags: ['tarefas', 'autenticacao']
-    }
-  ]);
+  const [statusList, setStatusList] = useState<ITaskStatus[]>([]);
+  const [changes, setChanges] = useState<ITaskChanges>({});
+  const [currentState, setCurrentState] = useState<ITask[][]>([]);
 
   useEffect(() => {
-    const containers = Object.keys(
-      tasks.reduce(
-        (prev, curr) => {
-          (prev[curr['status']] = prev[curr['status']] || []).push(curr);
-          return prev;
-        },
-        {} as { [key: string]: ITask[] }
-      )
-    ).map<IContainer>((status) => {
-      return {
-        id: uuid(),
-        label: status,
-        items: tasks.filter((task) => task.status === status)
-      };
-    });
+    const fetchData = async () => {
+      const statusList = await taskService.fetchStatus();
+      const tasks = await taskService.fetchTasks();
 
-    setContainers(containers);
-  }, [tasks]);
+      const state = statusList.reduce((prev, curr, idx) => {
+        prev[idx] = tasks
+          .filter((task) => task.status.id === curr.id)
+          .sort((a, b) => a.order - b.order);
+        return prev;
+      }, [] as ITask[][]);
+
+      setStatusList(statusList);
+      setCurrentState([...state]);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const updateData = async () => {
+      if (changes.updated) {
+        await Promise.all(
+          changes.updated.map((task) => taskService.updateTask(task))
+        );
+      }
+    };
+
+    updateData();
+  }, [changes]);
 
   const reorder = useCallback(
-    (list: ITask[], startIndex: number, endIndex: number) => {
-      const result = Array.from(list);
-      const [removed] = result.splice(startIndex, 1);
-      result.splice(endIndex, 0, removed);
+    (list: ITask[], fromIndex: number, toIndex: number) => {
+      let result = Array.from(list);
+      const [removed] = result.splice(fromIndex, 1);
+      result.splice(toIndex, 0, { ...removed });
+
+      result = result
+        .map((task, idx) => ({ ...task, order: idx + 1 }))
+        .sort((a, b) => a.order - b.order);
+
+      setChanges((prev) => {
+        return {
+          ...prev,
+          updated: [...result]
+        };
+      });
 
       return result;
     },
     []
   );
 
-  /**
-   * Moves an item from one list to another list.
-   */
   const move = useCallback(
     (
       source: ITask[],
@@ -102,29 +80,41 @@ export const TasksPage = () => {
       droppableSource: DraggableLocation,
       droppableDestination: DraggableLocation
     ) => {
-      const sourceClone = Array.from(source);
-      const destClone = Array.from(destination);
+      let sourceClone = Array.from(source);
+      let destClone = Array.from(destination);
       const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+      sourceClone = sourceClone
+        .map((task, idx) => ({
+          ...task,
+          order: idx + 1
+        }))
+        .sort((a, b) => a.order - b.order);
 
       destClone.splice(droppableDestination.index, 0, removed);
 
-      const result = [...containers];
-      const sourceContainer = result.find(
-        (c) => c.id === droppableSource.droppableId
-      )!;
-      const destContainer = result.find(
-        (c) => c.id === droppableDestination.droppableId
-      )!;
+      destClone = destClone
+        .map((task, idx) => ({
+          ...task,
+          order: idx + 1,
+          status: statusList[+droppableDestination.droppableId]
+        }))
+        .sort((a, b) => a.order - b.order);
 
-      sourceContainer.items = sourceClone;
-      destContainer.items = destClone.map((item) => {
-        item.status = destContainer.label;
-        return item;
+      const result: { [key: string]: ITask[] } = {};
+      result[droppableSource.droppableId] = sourceClone;
+      result[droppableDestination.droppableId] = destClone;
+
+      setChanges((prev) => {
+        return {
+          ...prev,
+          updated: [...sourceClone, ...destClone]
+        };
       });
 
       return result;
     },
-    [containers]
+    [statusList]
   );
 
   const onDragEnd = useCallback(
@@ -136,40 +126,35 @@ export const TasksPage = () => {
         return;
       }
 
-      const sInd = source.droppableId;
-      const dInd = destination.droppableId;
+      const sInd = +source.droppableId;
+      const dInd = +destination.droppableId;
+
+      const newState = [...currentState];
 
       if (sInd === dInd) {
         const items = reorder(
-          containers.find((c) => c.id === sInd)!.items,
+          currentState[sInd],
           source.index,
           destination.index
         );
-        const newState = [...containers];
-        containers.find((c) => c.id === sInd)!.items = items;
-        setContainers(newState);
-      } else {
-        const result = move(
-          containers.find((c) => c.id === sInd)!.items,
-          containers.find((c) => c.id === dInd)!.items,
-          source,
-          destination
-        );
-        const newState = [...containers];
-        newState.find((c) => c.id === sInd)!.items = result.find(
-          (c) => c.id === sInd
-        )!.items;
-        newState.find((c) => c.id === dInd)!.items = result.find(
-          (c) => c.id === dInd
-        )!.items;
-
-        setContainers(newState);
+        newState[sInd] = items;
+        setCurrentState(newState);
+        return;
       }
-    },
-    [containers, move, reorder]
-  );
 
-  console.log('render TasksPage');
+      const moveResult = move(
+        currentState[sInd],
+        currentState[dInd],
+        source,
+        destination
+      );
+      newState[sInd] = moveResult[sInd];
+      newState[dInd] = moveResult[dInd];
+
+      setCurrentState(newState);
+    },
+    [currentState, move, reorder]
+  );
 
   return (
     <>
@@ -197,26 +182,27 @@ export const TasksPage = () => {
 
       <section className="flex flex-col mt-8 h-full">
         <article className="flex mt-8">
-          {containers.map(({ id, label }) => (
+          {statusList.map(({ id, title }) => (
             <div
               key={id}
               className="flex-1 w-full h-full flex flex-col items-start mx-2 gap-4"
             >
-              <h1 className="font-bold text-lg text-zinc-600">{label}</h1>
+              <h1 className="font-bold text-lg text-zinc-600">{title}</h1>
             </div>
           ))}
         </article>
 
         <article className="flex">
           <DragDropContext onDragEnd={onDragEnd}>
-            {containers.map(({ id, items }) => (
-              <Droppable key={id} droppableId={id}>
+            {currentState.map((items, idx) => (
+              <Droppable key={idx} droppableId={`${idx}`}>
                 {(containerProvided) => (
                   <div
                     className="flex-1 w-full h-full flex flex-col items-start gap-4 m-2 mb-8"
                     ref={containerProvided.innerRef}
                     {...containerProvided.droppableProps}
                   >
+                    {containerProvided.placeholder}
                     {items.map((item, idx) => (
                       <Draggable
                         key={item.id}

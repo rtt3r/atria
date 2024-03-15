@@ -1,26 +1,39 @@
 import { ITask } from '@/types/taks';
+import { forwardRef, HTMLAttributes } from 'react';
 
 import { Badge } from './ui/badge';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle
 } from './ui/card';
-import { HTMLAttributes, forwardRef } from 'react';
 
 interface TaskItemProps extends HTMLAttributes<HTMLDivElement> {
   task: ITask;
 }
 
 const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
-  ({ task: { title, description, status, tags }, ...props }, ref) => {
-    console.log('render TaskItem');
+  (
+    {
+      task: {
+        title,
+        description,
+        status: { title: status },
+        order,
+        tags
+      },
+      ...props
+    },
+    ref
+  ) => {
     return (
       <Card className="border-none shadow-xl" {...props} ref={ref}>
         <CardHeader>
           <CardTitle className="text-lg">{title}</CardTitle>
+          <CardDescription>Order: {order}</CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col gap-2">
