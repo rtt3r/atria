@@ -115,7 +115,12 @@
   * {
     @apply border-border;
   }
+
+  html {
+    @apply h-screen w-screen
+  }
+
   body {
-    @apply bg-background text-foreground antialiased h-screen w-screen dark;
+    @apply bg-background text-foreground antialiased h-screen w-screen;
   }
 }

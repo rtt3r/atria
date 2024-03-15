@@ -19,7 +19,7 @@ const config: Config = {
       }
     },
     fontFamily: {
-      sans: ['Inter', ...defaultTheme.fontFamily.sans],
+      sans: ['Nunito', ...defaultTheme.fontFamily.sans],
       serif: [...defaultTheme.fontFamily.serif]
     },
     extend: {
