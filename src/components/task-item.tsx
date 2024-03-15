@@ -1,4 +1,4 @@
-import { useDroppable } from '@dnd-kit/core';
+import { ITask } from '@/types/taks';
 
 import { Badge } from './ui/badge';
 import {
@@ -10,29 +10,26 @@ import {
 } from './ui/card';
 
 interface TaskItemProps {
-  id: string;
+  task: ITask;
 }
 
-export const TaskItem = ({ id }: TaskItemProps) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id: id
-  });
-
+export const TaskItem = ({
+  task: { title, description, tags }
+}: TaskItemProps) => {
   return (
-    <Card className="border-none shadow-xl" ref={setNodeRef}>
+    <Card className="border-none shadow-xl">
       <CardHeader>
-        <CardTitle className="text-lg">#boraCodar um Kanban {id}</CardTitle>
+        <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="font-light">
-          Novo desafio do #boraCodar da Rocketseat, onde é proposto construir um
-          quadro de Kanban.
-        </p>
+        <p className="font-light">{description}</p>
       </CardContent>
-      <CardFooter>
-        <Badge className="bg-primary/25 text-primary shadow-none">
-          rocketseat
-        </Badge>
+      <CardFooter className="flex items-center justify-start gap-2">
+        {tags.map((tag) => (
+          <Badge key={tag} className="bg-primary/25 text-primary shadow-none">
+            {tag}
+          </Badge>
+        ))}
       </CardFooter>
     </Card>
   );
