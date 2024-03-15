@@ -1,9 +1,23 @@
+import { Draggable } from '@/components/draggable';
 import { TaskItem } from '@/components/task-item';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { DndContext } from '@dnd-kit/core';
 import { Filter } from 'lucide-react';
+import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 export const TasksPage = () => {
+  const [parent, setParent] = useState(null);
+
+  const handleDragEnd = (event) => {
+    const { over } = event;
+
+    // If the item is dropped over a container, set it as the parent
+    // otherwise reset the parent to `null`
+    setParent(over ? over.id : null);
+  };
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -41,30 +55,61 @@ export const TasksPage = () => {
           </div>
         </div>
 
-        <div className="flex items-start justify-between">
-          <div className="w-full h-full flex flex-col items-start gap-4 m-2 mb-8">
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
+        <DndContext onDragEnd={handleDragEnd}>
+          <div className="flex items-start justify-between">
+            <div className="w-full h-full flex flex-col items-start gap-4 m-2 mb-8">
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+            </div>
+            <div className="w-full h-full flex flex-col items-start gap-4 m-2 mb-8">
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+            </div>
+            <div className="w-full h-full flex flex-col items-start gap-4 m-2 mb-8">
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+              <Draggable id={uuid()}>
+                <TaskItem id={uuid()} />
+              </Draggable>
+            </div>
           </div>
-          <div className="w-full h-full flex flex-col items-start gap-4 m-2 mb-8">
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-          </div>
-          <div className="w-full h-full flex flex-col items-start gap-4 m-2 mb-8">
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
-          </div>
-        </div>
+        </DndContext>
       </div>
     </>
   );
