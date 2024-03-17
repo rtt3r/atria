@@ -4,10 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { HomePage } from './routes/home/index.tsx';
+import { HomePage } from './routes/home/page.tsx';
 import { Root } from './routes/root.tsx';
-import { SettingsPage } from './routes/settings/index.tsx';
-import { TasksPage } from './routes/tasks/index.tsx';
+import { SettingsPage } from './routes/settings/page.tsx';
+import { TasksPage } from './routes/tasks/page.tsx';
 
 const router = createBrowserRouter([
   {
