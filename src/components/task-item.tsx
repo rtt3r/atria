@@ -5,7 +5,6 @@ import { Badge } from './ui/badge';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle
@@ -16,34 +15,23 @@ interface TaskItemProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
-  (
-    {
-      task: {
-        title,
-        description,
-        status: { title: status },
-        order,
-        tags
-      },
-      ...props
-    },
-    ref
-  ) => {
+  ({ task: { title, description, tags }, ...props }, ref) => {
     return (
-      <Card className="border-none shadow-xl" {...props} ref={ref}>
+      <Card className="border-none shadow-sm" {...props} ref={ref}>
         <CardHeader>
-          <CardTitle className="text-lg">{title}</CardTitle>
-          <CardDescription>Order: {order}</CardDescription>
+          <CardTitle className="text-md">{title}</CardTitle>
         </CardHeader>
 
         <CardContent className="flex flex-col gap-2">
-          <p className="font-light">{description}</p>
-          <Badge className="shadow-none">{status}</Badge>
+          <p className="font-light text-sm">{description}</p>
         </CardContent>
 
         <CardFooter className="flex items-center justify-start gap-2">
           {tags.map((tag) => (
-            <Badge key={tag} className="bg-primary/25 text-primary shadow-none">
+            <Badge
+              key={tag}
+              className="bg-primary/25 text-primary shadow-none text-xs"
+            >
               {tag}
             </Badge>
           ))}

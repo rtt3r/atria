@@ -1,6 +1,4 @@
 import { TaskItem } from '@/components/task-item';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { TaskService } from '@/services/task-service';
 import { ITask, ITaskChanges, ITaskStatus } from '@/types/taks';
 import {
@@ -10,8 +8,9 @@ import {
   Droppable,
   DropResult
 } from '@hello-pangea/dnd';
-import { Filter } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+
+import { Search } from './components/search';
 
 const taskService = new TaskService();
 
@@ -169,15 +168,7 @@ export const TasksPage = () => {
       </section>
 
       <section className="flex items-center gap-3 mt-8">
-        <Button className="bg-primary text-primary-foreground">
-          <Filter className="mr-2 h-4 w-4" />
-          Filtrar
-        </Button>
-
-        <Input
-          placeholder="Busque por cards, assuntos ou responsáveis..."
-          className="bg-white border-gray-100 shadow-md"
-        />
+        <Search />
       </section>
 
       <section className="flex flex-col mt-8 h-full">
