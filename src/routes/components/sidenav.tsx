@@ -12,7 +12,7 @@ export interface SidenavProps extends HTMLAttributes<HTMLElement> {
   items: NavigationItem[];
 }
 
-const Sidenav = forwardRef<HTMLButtonElement, SidenavProps>(
+const Sidenav = forwardRef<HTMLElement, SidenavProps>(
   ({ className, items, ...props }, ref) => {
     return (
       <nav
@@ -20,22 +20,24 @@ const Sidenav = forwardRef<HTMLButtonElement, SidenavProps>(
         {...props}
         ref={ref}
       >
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col items-center justify-center gap-2 w-full">
           {items.map((item) => (
-            <li className="py-2" key={item.to}>
+            <li
+              className="flex items-center justify-center h-12 w-full border-x-2 border-transparent has-[.is-active]:border-l-sky-500 has-[.is-active]:text-sky-500 hover:border-l-sky-500/75 hover:text-sky-500/75"
+              key={item.to}
+            >
               <NavLink
                 to={item.to}
                 className={({ isActive }) =>
-                  cn(
-                    'flex items-center justify-start gap-4 text-white/75 hover:text-white hover:font-semibold',
-                    {
-                      'text-white font-semibold': isActive
-                    }
-                  )
+                  cn('flex items-center justify-start gap-4', {
+                    'is-active': isActive
+                  })
                 }
               >
                 {item.icon}
-                <span className="flex-1 whitespace-nowrap">{item.label}</span>
+                <span className="sr-only ml-3 flex-1 whitespace-nowrap">
+                  {item.label}
+                </span>
               </NavLink>
             </li>
           ))}

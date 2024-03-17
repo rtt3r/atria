@@ -1,42 +1,58 @@
+import { cn } from '@/lib/utils';
 import { ClipboardList, Home, Settings } from 'lucide-react';
-import { useMemo } from 'react';
+import { forwardRef, HTMLAttributes, useMemo } from 'react';
 
 import { NavigationItem, Sidenav } from './sidenav';
 
-export const Sidebar = () => {
-  const navigationItems: NavigationItem[] = useMemo(
-    () => [
-      {
-        to: '/',
-        label: 'Home',
-        icon: <Home />
-      },
-      {
-        to: '/tasks',
-        label: 'Tasks',
-        icon: <ClipboardList />
-      }
-    ],
-    []
-  );
+interface SidebarProps extends HTMLAttributes<HTMLElement> {}
 
-  const bottomNavigationItems: NavigationItem[] = useMemo(
-    () => [
-      {
-        to: '/settings',
-        label: 'Settings',
-        icon: <Settings />
-      }
-    ],
-    []
-  );
+const Sidebar = forwardRef<HTMLElement, SidebarProps>(
+  ({ className, ...props }, ref) => {
+    const navigationItems: NavigationItem[] = useMemo(
+      () => [
+        {
+          to: '/',
+          label: 'Home',
+          icon: <Home />
+        },
+        {
+          to: '/tasks',
+          label: 'Tasks',
+          icon: <ClipboardList />
+        }
+      ],
+      []
+    );
 
-  return (
-    <aside className="flex flex-col items-center min-w-44 p-6 pb-4">
-      <img src="/logo.svg" alt="Atria" className="mt-4 mb-8"></img>
+    const bottomNavigationItems: NavigationItem[] = useMemo(
+      () => [
+        {
+          to: '/settings',
+          label: 'Settings',
+          icon: <Settings />
+        }
+      ],
+      []
+    );
 
-      <Sidenav className="flex-1" items={navigationItems} />
-      <Sidenav items={bottomNavigationItems} />
-    </aside>
-  );
-};
+    return (
+      <aside
+        className={cn(
+          'flex flex-col items-center justify-center border-r pt-4 pb-2 min-w-16 max-w-16',
+          className
+        )}
+        {...props}
+        ref={ref}
+      >
+        <img src="/logo.svg" alt="Atria" className="mb-8" width={32}></img>
+
+        <Sidenav className="flex-1" items={navigationItems} />
+        <Sidenav items={bottomNavigationItems} />
+      </aside>
+    );
+  }
+);
+
+Sidebar.displayName = 'Sidebar';
+
+export { Sidebar };
