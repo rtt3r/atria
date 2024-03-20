@@ -13,6 +13,7 @@ import { RootBoundary } from './routes/root-boundary.tsx';
 import { Root } from './routes/root.tsx';
 import { SettingsPage } from './routes/settings/page.tsx';
 import { TasksPage } from './routes/tasks/page.tsx';
+import { ThemeProvider } from './contexts/theme/provider.tsx';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
