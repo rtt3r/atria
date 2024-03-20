@@ -1,4 +1,4 @@
-import { TaskItem } from '@/components/task-item';
+import { TaskItem } from '@/routes/tasks/components/task-item';
 import { TaskService } from '@/services/task-service';
 import { ITask, ITaskChanges, ITaskStatus } from '@/types/taks';
 import {

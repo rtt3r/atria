@@ -1,14 +1,14 @@
 import { ITask } from '@/types/taks';
 import { forwardRef, HTMLAttributes } from 'react';
 
-import { Badge } from './ui/badge';
+import { Badge } from '../../../components/ui/badge';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle
-} from './ui/card';
+} from '../../../components/ui/card';
 
 interface TaskItemProps extends HTMLAttributes<HTMLDivElement> {
   task: ITask;
@@ -18,15 +18,15 @@ const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
   ({ task: { title, description, tags }, ...props }, ref) => {
     return (
       <Card className="shadow-sm rounded-sm w-full" {...props} ref={ref}>
-        <CardHeader>
+        <CardHeader className="p-4">
           <CardTitle className="text-md">{title}</CardTitle>
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-2">
+        <CardContent className="flex flex-col gap-2 p-4 pt-0">
           <p className="font-light text-sm">{description}</p>
         </CardContent>
 
-        <CardFooter className="flex items-center justify-start gap-2">
+        <CardFooter className="flex items-center justify-start gap-2 p-4 pt-0">
           {tags.map((tag) => (
             <Badge
               key={tag}
