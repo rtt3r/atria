@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { ClipboardList, Home, Settings } from 'lucide-react';
+import { ClipboardList, Home } from 'lucide-react';
 import { forwardRef, HTMLAttributes, useMemo } from 'react';
 
 import { NavigationItem, Sidenav } from './sidenav';
@@ -24,30 +24,16 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(
       []
     );
 
-    const bottomNavigationItems: NavigationItem[] = useMemo(
-      () => [
-        {
-          to: '/settings',
-          label: 'Settings',
-          icon: <Settings />
-        }
-      ],
-      []
-    );
-
     return (
       <aside
         className={cn(
-          'flex flex-col items-center justify-center border-r pt-4 pb-2 min-w-16 max-w-16',
+          'flex flex-col items-center justify-center border-r py-4 min-w-16 max-w-16',
           className
         )}
         {...props}
         ref={ref}
       >
-        <img src="/logo.svg" alt="Atria" className="mb-8" width={32}></img>
-
         <Sidenav className="flex-1" items={navigationItems} />
-        <Sidenav items={bottomNavigationItems} />
       </aside>
     );
   }

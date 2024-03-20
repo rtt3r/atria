@@ -17,7 +17,7 @@ interface TaskItemProps extends HTMLAttributes<HTMLDivElement> {
 const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
   ({ task: { title, description, tags }, ...props }, ref) => {
     return (
-      <Card className="border-none shadow-sm" {...props} ref={ref}>
+      <Card className="shadow-sm rounded-sm w-full" {...props} ref={ref}>
         <CardHeader>
           <CardTitle className="text-md">{title}</CardTitle>
         </CardHeader>

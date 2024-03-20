@@ -12,7 +12,7 @@ export const Search = () => {
 
       <Input
         placeholder="Busque por cards, assuntos ou responsáveis..."
-        className="bg-white border-gray-100 shadow-md"
+        className=""
       />
     </>
   );

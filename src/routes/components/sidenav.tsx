@@ -20,10 +20,10 @@ const Sidenav = forwardRef<HTMLElement, SidenavProps>(
         {...props}
         ref={ref}
       >
-        <ul className="flex flex-col items-center justify-center gap-2 w-full">
+        <ul className="flex flex-col items-center justify-center w-full">
           {items.map((item) => (
             <li
-              className="flex items-center justify-center h-12 w-full border-x-2 border-transparent has-[.is-active]:border-l-sky-500 has-[.is-active]:text-sky-500 hover:border-l-sky-500/75 hover:text-sky-500/75"
+              className="flex items-center justify-center h-12 w-full border-x-2 border-transparent text-primary/75 has-[.is-active]:border-l-primary has-[.is-active]:text-primary hover:border-l-primary hover:text-primary"
               key={item.to}
             >
               <NavLink

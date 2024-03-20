@@ -156,40 +156,34 @@ export const TasksPage = () => {
   );
 
   return (
-    <>
-      <section className="flex items-center justify-between">
+    <div className="flex flex-col gap-4 h-full">
+      <section className="flex items-center justify-start mb-4">
         <h1 className="font-bold text-2xl">Tasks Page</h1>
-        <img
-          src="https://github.com/rtt3r.png"
-          alt="Avatar"
-          width={45}
-          className="rounded-full"
-        />
       </section>
 
-      <section className="flex items-center gap-3 mt-8">
+      <section className="flex items-center gap-3">
         <Search />
       </section>
 
-      <section className="flex flex-col mt-8 h-full">
-        <article className="flex mt-8">
+      <section className="flex flex-col h-full">
+        <article className="flex gap-2">
           {statusList.map(({ id, title }) => (
             <div
               key={id}
-              className="flex-1 w-full h-full flex flex-col items-start mx-2 gap-4"
+              className="flex-1 w-full h-full flex flex-col items-start gap-2"
             >
-              <h1 className="font-bold text-lg text-zinc-600">{title}</h1>
+              <h1 className="font-bold text-lg">{title}</h1>
             </div>
           ))}
         </article>
 
-        <article className="flex">
+        <article className="flex-1 flex gap-2">
           <DragDropContext onDragEnd={onDragEnd}>
             {currentState.map((items, idx) => (
               <Droppable key={idx} droppableId={`${idx}`}>
                 {(containerProvided) => (
                   <div
-                    className="flex-1 w-full h-full flex flex-col items-start gap-4 m-2 mb-8"
+                    className="flex-1 w-full h-full flex flex-col items-start gap-2 p-2 rounded-sm bg-gray-100 dark:bg-slate-900"
                     ref={containerProvided.innerRef}
                     {...containerProvided.droppableProps}
                   >
@@ -217,6 +211,6 @@ export const TasksPage = () => {
           </DragDropContext>
         </article>
       </section>
-    </>
+    </div>
   );
 };

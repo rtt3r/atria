@@ -1,19 +1,24 @@
 import { Outlet } from 'react-router-dom';
 
 import { Sidebar } from './components/sidebar';
+import { Header } from './components/header';
 
 export const Root = () => {
   return (
     <div className="flex min-h-screen h-full w-full">
-      <Sidebar className="" />
-
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 flex flex-col pt-10 px-12 max-h-[calc(100vh-56px)] overflow-y-auto">
-          <Outlet />
-        </main>
-        <footer className="flex justify-center items-center w-full h-8 text-xs mt-4">
-          © 2024 Copyright Atria
-        </footer>
+        <Header />
+        <div className="flex-1 flex">
+          <Sidebar />
+          <div className="flex-1 flex flex-col overflow-y-auto">
+            <main className="flex-1 p-8">
+              <Outlet />
+            </main>
+            <footer className="flex justify-center items-center w-full h-10 text-xs border-t">
+              © 2024 Copyright Atria
+            </footer>
+          </div>
+        </div>
       </div>
     </div>
   );
