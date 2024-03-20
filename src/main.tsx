@@ -2,9 +2,14 @@ import './global.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider
+} from 'react-router-dom';
 
 import { HomePage } from './routes/home/page.tsx';
+import { RootBoundary } from './routes/root-boundary.tsx';
 import { Root } from './routes/root.tsx';
 import { SettingsPage } from './routes/settings/page.tsx';
 import { TasksPage } from './routes/tasks/page.tsx';
@@ -13,7 +18,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <h1>Not Found</h1>,
+    errorElement: <RootBoundary />,
     children: [
       {
         path: '',
@@ -28,6 +33,10 @@ const router = createBrowserRouter([
         element: <SettingsPage />
       }
     ]
+  },
+  {
+    path: '*',
+    element: <Navigate to="/" replace={true} />
   }
 ]);
 
