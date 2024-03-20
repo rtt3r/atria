@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { TaskItem } from '@/routes/tasks/components/task-item';
 import { TaskService } from '@/services/task-service';
 import { ITask, ITaskChanges, ITaskStatus } from '@/types/taks';
@@ -9,6 +10,7 @@ import {
   DropResult
 } from '@hello-pangea/dnd';
 import { useCallback, useEffect, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { Search } from './components/search';
 
@@ -155,6 +157,18 @@ export const TasksPage = () => {
     [currentState, move, reorder]
   );
 
+  const addState = useCallback(() => {
+    setStatusList((prev) => [
+      ...prev,
+      {
+        id: uuid(),
+        title: 'Novo'
+      }
+    ]);
+
+    setCurrentState((prev) => [...prev, []]);
+  }, []);
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <section className="flex items-center justify-start mb-4">
@@ -165,16 +179,25 @@ export const TasksPage = () => {
         <Search />
       </section>
 
-      <section className="flex flex-col h-full">
+      <section className="flex-1 flex flex-col gap-2 h-full overflow-x-auto">
         <article className="flex gap-2">
           {statusList.map(({ id, title }) => (
             <div
               key={id}
-              className="flex-1 w-full h-full flex flex-col items-start gap-2"
+              className="flex flex-col items-start gap-2 h-full min-w-96 w-96 border border-t-4 border-t-green-500 rounded-sm"
             >
-              <h1 className="font-bold text-lg">{title}</h1>
+              <h1 className="font-semibold text-md m-2">{title}</h1>
             </div>
           ))}
+          <div className="flex flex-col items-start gap-2 h-full min-w-96 w-96 border border-t-4 rounded-sm">
+            <Button
+              variant="ghost"
+              className="hover:bg-transparent w-full flex justify-start items-center font-semibold text-md p-2"
+              onClick={addState}
+            >
+              Novo estado
+            </Button>
+          </div>
         </article>
 
         <article className="flex-1 flex gap-2">
@@ -183,7 +206,7 @@ export const TasksPage = () => {
               <Droppable key={idx} droppableId={`${idx}`}>
                 {(containerProvided) => (
                   <div
-                    className="flex-1 w-full h-full flex flex-col items-start gap-2 p-2 rounded-sm bg-gray-100 dark:bg-slate-900"
+                    className="flex flex-col items-start gap-2 h-full min-w-96 w-96 p-2 border rounded-sm bg-gray-100 dark:bg-slate-900"
                     ref={containerProvided.innerRef}
                     {...containerProvided.droppableProps}
                   >
@@ -208,6 +231,8 @@ export const TasksPage = () => {
                 )}
               </Droppable>
             ))}
+
+            <div className="flex flex-col items-start gap-2 h-full min-w-96 w-96 p-2 rounded-sm"></div>
           </DragDropContext>
         </article>
       </section>

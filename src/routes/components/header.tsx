@@ -23,7 +23,7 @@ export const Header = () => {
   const { setTheme } = useTheme();
 
   return (
-    <header className="flex justify-between items-center p-4 w-full text-xs border-b">
+    <header className="flex justify-between items-center p-4 w-full h-20 text-xs border-b">
       <Link to="/">
         <img src="/logo.png" alt="Atria" width={35}></img>
       </Link>

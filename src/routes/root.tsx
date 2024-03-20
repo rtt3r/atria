@@ -10,8 +10,8 @@ export const Root = () => {
         <Header />
         <div className="flex-1 flex">
           <Sidebar />
-          <div className="flex-1 flex flex-col overflow-y-auto">
-            <main className="flex-1 p-8">
+          <div className="flex-1 flex flex-col max-h-[calc(100vh-5rem)] max-w-[calc(100vw-4rem)]">
+            <main className="flex-1 p-8 overflow-y-auto">
               <Outlet />
             </main>
             <footer className="flex justify-center items-center w-full h-10 text-xs border-t">
