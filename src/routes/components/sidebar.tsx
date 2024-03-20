@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { ClipboardList, Home } from 'lucide-react';
+import { ClipboardList, Home, Waypoints } from 'lucide-react';
 import { forwardRef, HTMLAttributes, useMemo } from 'react';
 
 import { NavigationItem, Sidenav } from './sidenav';
@@ -19,6 +19,11 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           to: '/tasks',
           label: 'Tasks',
           icon: <ClipboardList />
+        },
+        {
+          to: '/flows',
+          label: 'Flows',
+          icon: <Waypoints />
         }
       ],
       []
