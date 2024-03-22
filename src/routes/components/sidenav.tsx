@@ -29,15 +29,13 @@ const Sidenav = forwardRef<HTMLElement, SidenavProps>(
               <NavLink
                 to={item.to}
                 className={({ isActive }) =>
-                  cn('flex items-center justify-start gap-4', {
+                  cn('flex items-center justify-center gap-4 w-full h-full', {
                     'is-active': isActive
                   })
                 }
               >
                 {item.icon}
-                <span className="sr-only ml-3 flex-1 whitespace-nowrap">
-                  {item.label}
-                </span>
+                <span className="sr-only">{item.label}</span>
               </NavLink>
             </li>
           ))}

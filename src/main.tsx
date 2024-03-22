@@ -8,12 +8,13 @@ import {
   RouterProvider
 } from 'react-router-dom';
 
-import { HomePage } from './routes/home/page.tsx';
-import { RootBoundary } from './routes/root-boundary.tsx';
-import { Root } from './routes/root.tsx';
-import { SettingsPage } from './routes/settings/page.tsx';
-import { TasksPage } from './routes/tasks/page.tsx';
-import { ThemeProvider } from './contexts/theme/provider.tsx';
+import { ThemeProvider } from './contexts/theme/provider';
+import { FlowsPage } from './routes/flows/page';
+import { HomePage } from './routes/home/page';
+import { Root } from './routes/root';
+import { RootBoundary } from './routes/root-boundary';
+import { SettingsPage } from './routes/settings/page';
+import { TasksPage } from './routes/tasks/page';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: 'settings',
         element: <SettingsPage />
+      },
+      {
+        path: 'flows',
+        element: <FlowsPage />
       }
     ]
   },
