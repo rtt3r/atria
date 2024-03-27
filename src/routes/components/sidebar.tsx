@@ -32,7 +32,7 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     return (
       <aside
         className={cn(
-          'flex flex-col items-center justify-center border-r py-4 min-w-16 max-w-16',
+          'flex flex-col items-center justify-center border-r py-4',
           className
         )}
         {...props}

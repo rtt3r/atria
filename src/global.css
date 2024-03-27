@@ -65,6 +65,6 @@
   }
 
   #root {
-    @apply flex flex-col;
+    @apply flex;
   }
 }
